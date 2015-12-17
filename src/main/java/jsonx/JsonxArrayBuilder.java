@@ -7,13 +7,23 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 class JsonxArrayBuilder implements JsonArrayBuilder {
 
     private List<JsonValue> array = new ArrayList<>();
+
+    public JsonxArrayBuilder(JsonArray array) {
+        for (JsonValue jsonValue : array) {
+            add(jsonValue);
+        }
+    }
 
     @Override
     public JsonxArrayBuilder add(JsonValue value) {

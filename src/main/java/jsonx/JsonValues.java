@@ -14,8 +14,14 @@ class JsonValues {
     boolean isTrue(JsonValue v) {
         return v != null && v == JsonValue.TRUE;
     }
+
     boolean isFalse(JsonValue v) {
         return v != null &&  v == JsonValue.FALSE;
+    }
+    
+    boolean isBoolean(JsonValue v) {
+        if (v == null) return false;
+        return (isTrue(v) || isFalse(v));
     }
     
     boolean toBoolean(JsonValue v) {

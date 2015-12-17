@@ -14,10 +14,10 @@ import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 
-class JsonxArray extends AbstractList<JsonValue> implements JsonArray {
+class JsonxArray extends AbstractList<JsonValue>implements JsonArray {
 
     private final List<JsonValue> array;
-    
+
     public JsonxArray(List<JsonValue> array) {
         requireNonNull(array, "array is required");
         this.array = unmodifiableList(new ArrayList<>(array));
@@ -120,14 +120,14 @@ class JsonxArray extends AbstractList<JsonValue> implements JsonArray {
 
     @Override
     public boolean getBoolean(int index) {
-        JsonValue value = get(index);
+        JsonValue value = getRequired(index);
         return JsonValues.toBoolean(value);
     }
 
     @Override
     public boolean getBoolean(int index, boolean defaultValue) {
-        JsonValue value = get(index);
-        if (JsonValues.isFalse(value) || JsonValues.isTrue(value)) {
+        JsonValue value = getRequired(index);
+        if (JsonValues.isBoolean(value)) {
             return JsonValues.toBoolean(value);
         }
         return defaultValue;
@@ -136,6 +136,21 @@ class JsonxArray extends AbstractList<JsonValue> implements JsonArray {
     @Override
     public boolean isNull(int index) {
         return get(index) == JsonValue.NULL;
+    }
+
+    JsonValue getRequired(int index) {
+        return getRequired(index, JsonValue.class);
+    }
+
+    <T extends JsonValue> T getRequired(int index, Class<T> c) {
+        return c.cast(get(requireInbounds(index)));
+    }
+    
+    private int requireInbounds(int index) {
+        if (index < 0 || array.size() <= index) {
+            throw new ArrayIndexOutOfBoundsException(index + " is not a valid array index");
+        }
+        return index;
     }
 
 }

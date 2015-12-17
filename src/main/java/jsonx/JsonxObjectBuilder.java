@@ -5,15 +5,25 @@ import static java.util.Objects.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 class JsonxObjectBuilder implements JsonObjectBuilder {
 
-    private LinkedHashMap<String, JsonValue> object = new LinkedHashMap<>();
+    private final LinkedHashMap<String, JsonValue> object = new LinkedHashMap<>();
+
+    public JsonxObjectBuilder(JsonObject object) {
+        for (Entry<String, JsonValue> e : object.entrySet()) {
+            add(e.getKey(), e.getValue());
+        }
+    }
 
     @Override
     public JsonObjectBuilder add(String name, JsonValue value) {
@@ -93,7 +103,8 @@ class JsonxObjectBuilder implements JsonObjectBuilder {
     @Override
     public JsonObjectBuilder add(String name, JsonArrayBuilder builder) {
         requireNonNull(name, "name is required");
-        requireNonNull(builder, "value is builder");
+        requireNonNull(builder, "builder is builder");
+        object.put(name, builder.build());
         return this;
     }
 
