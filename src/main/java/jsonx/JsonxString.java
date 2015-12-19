@@ -2,17 +2,21 @@ package jsonx;
 
 import javax.json.JsonString;
 
+import com.fasterxml.jackson.databind.node.TextNode;
+
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
-@ToString
 public class JsonxString implements JsonString {
 
-    private final String value;
-    
+    private final TextNode value;
+
+    JsonxString(String value) {
+        this(new TextNode(value));
+    }
+
     @Override
     public ValueType getValueType() {
         return ValueType.STRING;
@@ -20,12 +24,17 @@ public class JsonxString implements JsonString {
 
     @Override
     public String getString() {
-        return null;
+        return value.asText();
     }
 
     @Override
     public CharSequence getChars() {
         return getString();
+    }
+    
+    @Override
+    public String toString() {
+        return value == null ? null : value.asText();
     }
 
 }
