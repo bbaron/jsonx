@@ -21,6 +21,7 @@ public class JsonxProvider extends JsonProvider {
     private final JsonFactory jsonFactory;
     private final JsonxGeneratorFactory jsonGeneratorFactory;
     private final JsonxBuilderFactory builderFactory = new JsonxBuilderFactory();
+    private final JsonxWriterFactory writerFactory = new JsonxWriterFactory();
 
     public JsonxProvider() {
         this.jsonFactory = new MappingJsonFactory();
@@ -69,17 +70,17 @@ public class JsonxProvider extends JsonProvider {
 
     @Override
     public JsonWriter createWriter(Writer writer) {
-        return null;
+        return writerFactory.createWriter(writer);
     }
 
     @Override
     public JsonWriter createWriter(OutputStream out) {
-        return null;
+        return writerFactory.createWriter(out);
     }
 
     @Override
     public JsonWriterFactory createWriterFactory(Map<String, ?> config) {
-        return null;
+        return new JsonxWriterFactory(config);
     }
 
     @Override
